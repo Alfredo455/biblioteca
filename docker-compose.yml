@@ -1,0 +1,17 @@
+services:
+  mongo:
+    image: mongo:7
+    ports: ["27017:27017"]
+    volumes: [mongo-data:/data/db]
+
+  api:
+    build: ./api
+    environment:
+      MONGO_URI: mongodb://mongo:27017/biblioteca
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
+      CORS_ORIGIN: http://localhost:4200
+    ports: ["3000:3000"]
+    depends_on: [mongo]
+
+volumes:
+  mongo-data:
